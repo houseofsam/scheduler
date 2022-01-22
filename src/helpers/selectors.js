@@ -26,3 +26,16 @@ export function getAppointmentsForDay(state, day) {
 
   return apptArray;
 }
+
+export function getInterview(state, appointmentInterview) {
+  if (!appointmentInterview) {
+    return null;
+  }
+
+  // get the ID of the interviewer from the interview object that's passed in
+  const interviewerID = appointmentInterview.interviewer;
+  // reassign the value of the interviewer from the passed in interviewer object with the actual interviewer object from state which is obtained using the ID above
+  appointmentInterview.interviewer = state.interviewers[interviewerID.toString()]
+
+  return appointmentInterview;
+}
