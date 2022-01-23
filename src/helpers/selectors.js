@@ -39,3 +39,32 @@ export function getInterview(state, appointmentInterview) {
 
   return appointmentInterview;
 }
+
+export function getInterviewersForDay(state, day) {
+  const interviewerArray = [];
+
+  const filteredDays = state.days.filter(individualDay => individualDay.name === day);
+  const interviewerIDs = filteredDays.map(filteredDay => filteredDay.interviewers)[0];
+  
+  // return empty array when days data is empty
+  if (state.days.length === 0) {
+    return interviewerArray;
+  }
+  // return empty array when day not found
+  if (filteredDays.length === 0) {
+    return interviewerArray;
+  }
+
+  //iterate through appt ids for a selected day
+  interviewerIDs.forEach((id) => {
+    // iterate through appointments object in state
+    for (let appt in state.interviewers) {
+      // check if id matches with id
+      if (id === state.interviewers[appt].id) {
+        interviewerArray.push(state.interviewers[id])
+      }
+    }
+  })
+
+  return interviewerArray;
+}
