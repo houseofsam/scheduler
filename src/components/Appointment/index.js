@@ -5,17 +5,41 @@ import Show from './Show';
 import Empty from './Empty';
 import useVisualMode from 'hooks/useVisualMode';
 import Form from './Form';
+import Status from './Status';
+import Confirm from './Confirm';
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
+const SAVING = "SAVING";
+const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 const Appointment = (props) => {
 
-  const { mode, transition, back } = useVisualMode(
+  const { mode, transition, back, history } = useVisualMode(
     // Initial state argument
     props.interview ? SHOW : EMPTY
   );
+
+   function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+
+    transition(SAVING);
+    props.bookInterview(props.id, interview)
+      .then(() => transition(SHOW));
+  }
+
+  function cancel() {
+    transition(SAVING);
+
+    props.cancelInterview(props.id)
+      .then(() => transition(EMPTY));
+  }
+
 
   return (
     <article className="appointment">
@@ -25,14 +49,39 @@ const Appointment = (props) => {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          onDelete={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
         />
       )}
       {mode === CREATE && (
         <Form
           interviewers={props.interviewers}
           onCancel={() => back()}
+          onSave={save}
         />
       )}
+      {mode === EDIT && (
+        <Form
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.id}
+          interviewers={props.interviewers}
+          onCancel={() => back()}
+          onSave={save}
+        />
+      )}
+      {mode === SAVING && (
+        <Status 
+          message={history.slice(-2)[0] === "CONFIRM" ? "Deleting..." : "Saving..."}
+        />
+      )}
+      {mode === CONFIRM && (
+        <Confirm 
+          onCancel={() => back()}
+          onConfirm={cancel}
+          message={"Are you sure you would like to delete?"}
+        />
+      )}
+
     </article>
   )
 };
