@@ -13,6 +13,7 @@ const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
 const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 const Appointment = (props) => {
 
@@ -27,13 +28,13 @@ const Appointment = (props) => {
       interviewer
     };
 
-    transition(SAVING, true);
+    transition(SAVING);
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW));
   }
 
   function cancel() {
-    transition(SAVING, true);
+    transition(SAVING);
 
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY));
@@ -49,6 +50,7 @@ const Appointment = (props) => {
           student={props.interview.student}
           interviewer={props.interview.interviewer}
           onDelete={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
         />
       )}
       {mode === CREATE && (
@@ -58,9 +60,18 @@ const Appointment = (props) => {
           onSave={save}
         />
       )}
+      {mode === EDIT && (
+        <Form
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.id}
+          interviewers={props.interviewers}
+          onCancel={() => back()}
+          onSave={save}
+        />
+      )}
       {mode === SAVING && (
         <Status 
-          message={history.slice(-2)[0] === "EMPTY" ? "Saving..." : "Deleting..."}
+          message={history.slice(-2)[0] === "CONFIRM" ? "Deleting..." : "Saving..."}
         />
       )}
       {mode === CONFIRM && (
