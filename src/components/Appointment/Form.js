@@ -33,6 +33,7 @@ const Form = (props) => {
           interviewers={props.interviewers}
           onChange={setInterviewer}
           value={interviewer}
+          required
         />
       </section>
       <section className="appointment__card-right">
