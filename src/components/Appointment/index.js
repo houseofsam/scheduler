@@ -32,33 +32,21 @@ const Appointment = (props) => {
     };
 
     transition(SAVING);
-    
+
     props.bookInterview(props.id, interview)
-      .then((res) => {
-        if (res.status > 400) {
-          transition(ERROR_SAVE, true);
-        } else {
-          transition(SHOW);
-        }
-      })
-      .catch((error) => console.log(error));
+      .then(() => transition(SHOW))
+      .catch(() => transition(ERROR_SAVE, true));
   }
 
+  // cancel appointment
   function cancel() {
     transition(SAVING);
 
     props.cancelInterview(props.id)
-      .then((res) => {
-        if (res.status > 400) {
-          transition(ERROR_DELETE, true);
-        } else {
-          transition(EMPTY)
-        }
-      })
-      .catch((error) => console.log(error));
+      .then(() => transition(EMPTY))
+      .catch(() => transition(ERROR_DELETE, true));
   }
-
-
+  
   return (
     <article className="appointment">
       <Header time={props.time} />
