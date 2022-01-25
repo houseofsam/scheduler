@@ -26,6 +26,29 @@ export default function useApplicationData() {
     });
   }, []);
 
+  function updateSpots(apptID, cancel) {
+    // get day object by dayID
+    const selectedDay = state.days.filter(day => day.appointments.includes(apptID))[0];
+    let count = selectedDay.spots;
+    
+    // if appt slot wasn't empty && if cancel = false, action performed was an edit - no count update required
+    if (state.appointments[apptID].interview !== null && !cancel) {
+      return state.days;
+    }
+
+    // adjust count depending if appt was cancelled or added
+    if (cancel) {
+      count++;
+    } else {
+      count--;
+    }
+
+    // copy days array, change spots count, return new days array
+    const newDays = [ ...state.days ];
+    newDays.find(newDay => newDay === selectedDay).spots = count;
+    return newDays;
+  }
+  
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -37,19 +60,27 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    return axios.put(`/api/appointments/${id}`, appointment).then(() => {
-      setState((prevState) => ({ ...prevState, appointments }));
-    });
+    const days = updateSpots(id, false); // 2nd param = cancel
+
+    return axios
+      .put(`/api/appointments/${id}`, appointment)
+      .then(() => {
+        setState((prevState) => ({ ...prevState, appointments, days }));
+      });
   }
 
   function cancelInterview(id) {
     let newApptObj = { ...state.appointments[id], interview: null };
     const appointments = { ...state.appointments, [id]: newApptObj };
+    const days = updateSpots(id, true); // 2nd param = cancel
 
-    return axios.delete(`/api/appointments/${id}`).then(() => {
-      setState((prevState) => ({ ...prevState, appointments }));
-    });
+    return axios
+      .delete(`/api/appointments/${id}`)
+      .then(() => {
+        setState((prevState) => ({ ...prevState, appointments, days }));
+      });
   }
+
 
   return { state, setDay, bookInterview, cancelInterview };
 }
