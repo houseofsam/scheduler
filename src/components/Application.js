@@ -49,7 +49,7 @@ export default function Application(props) {
       .then(() => {
         setState((prevState) => ({ ...prevState, appointments }));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => error.response);
   }
 
 
@@ -65,7 +65,7 @@ export default function Application(props) {
       .then(() => {
         setState((prevState) => ({ ...prevState, appointments}))
       })
-      .catch((error) => console.log(error));
+      .catch((error) => error.response);
   }
 
   const appointmentList = dailyAppointments.map((appointment) => {
