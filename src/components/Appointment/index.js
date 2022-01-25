@@ -12,7 +12,7 @@ import Error from './Error';
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
-const SAVING = "SAVING";
+const PROCESSING = "PROCESSING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
 const ERROR_SAVE = "ERROR_SAVE";
@@ -31,7 +31,7 @@ const Appointment = (props) => {
       interviewer
     };
 
-    transition(SAVING);
+    transition(PROCESSING);
 
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW))
@@ -40,13 +40,13 @@ const Appointment = (props) => {
 
   // cancel appointment
   function cancel() {
-    transition(SAVING);
+    transition(PROCESSING);
 
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true));
   }
-  
+
   return (
     <article className="appointment">
       <Header time={props.time} />
@@ -75,7 +75,7 @@ const Appointment = (props) => {
           onSave={save}
         />
       )}
-      {mode === SAVING && (
+      {mode === PROCESSING && (
         <Status 
           message={history.slice(-2)[0] === "CONFIRM" ? "Deleting..." : "Saving..."}
         />
