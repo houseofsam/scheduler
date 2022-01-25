@@ -27,7 +27,7 @@ export default function useApplicationData() {
   }, []);
 
   function updateSpots(apptID, cancel) {
-    // get day object by dayID
+    // get day object by appointment ID
     const selectedDay = state.days.filter(day => day.appointments.includes(apptID))[0];
     let count = selectedDay.spots;
     
@@ -36,12 +36,8 @@ export default function useApplicationData() {
       return state.days;
     }
 
-    // adjust count depending if appt was cancelled or added
-    if (cancel) {
-      count++;
-    } else {
-      count--;
-    }
+    // adjust count depending on whether appt was cancelled or added
+    cancel ? count++ : count--;
 
     // copy days array, change spots count, return new days array
     const newDays = [ ...state.days ];
