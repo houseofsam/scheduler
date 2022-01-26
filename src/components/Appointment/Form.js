@@ -27,13 +27,13 @@ const Form = (props) => {
             placeholder="Enter Student Name"
             value={student}
             onChange={(event) => setStudent(event.target.value)}
+            data-testid="student-name-input"
           />
         </form>
         <InterviewerList 
           interviewers={props.interviewers}
           onChange={setInterviewer}
           value={interviewer}
-          required
         />
       </section>
       <section className="appointment__card-right">

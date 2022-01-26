@@ -26,7 +26,7 @@ const Appointment = (props) => {
   );
 
    function save(name, interviewer) {
-     if (!interviewer || !name) {
+     if (!interviewer) {
        transition(ERROR_SAVE);
        return;
      }
