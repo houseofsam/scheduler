@@ -19,7 +19,7 @@ export function getAppointmentsForDay(state, day) {
     for (let appt in state.appointments) {
       // check if id matches with id
       if (id === state.appointments[appt].id) {
-        apptArray.push(state.appointments[id])
+        apptArray.push(state.appointments[id]);
       }
     }
   })
@@ -67,7 +67,7 @@ export function getInterviewersForDay(state, day) {
     for (let appt in state.interviewers) {
       // check if id matches with id
       if (id === state.interviewers[appt].id) {
-        interviewerArray.push(state.interviewers[id])
+        interviewerArray.push(state.interviewers[id]);
       }
     }
   })
