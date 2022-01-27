@@ -26,10 +26,11 @@ const Appointment = (props) => {
   );
 
    function save(name, interviewer) {
-     if (!interviewer) {
-       transition(ERROR_SAVE);
-       return;
-     }
+    //  prevent user from submitting if no interviewer is selected
+    if (!interviewer) {
+      // transition(SHOW);
+      return;
+    }
 
     const interview = {
       student: name,
