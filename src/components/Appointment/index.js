@@ -26,11 +26,6 @@ const Appointment = (props) => {
   );
 
    function save(name, interviewer) {
-    //  prevent user from submitting if no interviewer is selected
-    if (!interviewer) {
-      return;
-    }
-
     const interview = {
       student: name,
       interviewer
