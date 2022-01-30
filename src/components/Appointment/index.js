@@ -33,6 +33,7 @@ const Appointment = (props) => {
 
     transition(PROCESSING);
 
+    // props.id is the appointment ID
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch(() => transition(ERROR_SAVE, true));
@@ -40,7 +41,7 @@ const Appointment = (props) => {
 
   // cancel appointment
   function cancel() {
-    transition(PROCESSING);
+    transition(PROCESSING, true);
 
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
