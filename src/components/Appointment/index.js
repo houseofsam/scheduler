@@ -63,7 +63,7 @@ const Appointment = (props) => {
       {mode === CREATE && (
         <Form
           interviewers={props.interviewers}
-          onCancel={() => back()}
+          onCancel={back}
           onSave={save}
         />
       )}
@@ -72,7 +72,7 @@ const Appointment = (props) => {
           student={props.interview.student}
           interviewer={props.interview.interviewer.id}
           interviewers={props.interviewers}
-          onCancel={() => back()}
+          onCancel={back}
           onSave={save}
         />
       )}
@@ -83,7 +83,7 @@ const Appointment = (props) => {
       )}
       {mode === CONFIRM && (
         <Confirm 
-          onCancel={() => back()}
+          onCancel={back}
           onConfirm={cancel}
           message={"Are you sure you would like to delete?"}
         />
@@ -91,13 +91,13 @@ const Appointment = (props) => {
       {mode === ERROR_DELETE && (
         <Error 
           message={"Could not cancel appointment"}
-          onClose={() => back()}
+          onClose={back}
         />
       )}
       {mode === ERROR_SAVE && (
         <Error 
           message={"Could not save appointment"}
-          onClose={() => back()}
+          onClose={back}
         />
       )}
 
