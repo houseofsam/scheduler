@@ -1,24 +1,14 @@
 export function getAppointmentsForDay(state, day) {
-  const apptArray = [];
+  // find the day passed in as the 2nd argument in the selector function
+  const findDay = state.days.find(individualDay => individualDay.name === day);
 
-  const filteredDays = state.days.filter(individualDay => individualDay.name === day);
-  const apptIds = filteredDays.map(filteredDay => filteredDay.appointments)[0];
-  
   // return empty array when days data is empty or when day not found
-  if (state.days.length === 0 || filteredDays.length === 0) {
-    return apptArray;
+  if (state.days.length === 0 || !findDay) {
+    return [];
   }
 
-  //iterate through appt ids for a selected day
-  apptIds.forEach((id) => {
-    for (let appt in state.appointments) {
-      if (id === state.appointments[appt].id) {
-        apptArray.push(state.appointments[id]);
-      }
-    }
-  })
-
-  return apptArray;
+  // return array of appointment objects for the selected day
+  return findDay.appointments.map(id => state.appointments[id])
 }
 
 export function getInterview(state, appointmentInterview) {
@@ -41,23 +31,13 @@ export function getInterview(state, appointmentInterview) {
 }
 
 export function getInterviewersForDay(state, day) {
-  const interviewerArray = [];
-
-  const filteredDays = state.days.filter(individualDay => individualDay.name === day);
-  const interviewerIDs = filteredDays.map(filteredDay => filteredDay.interviewers)[0];
+  const findDay = state.days.find(individualDay => individualDay.name === day);
   
   // return empty array when days data is empty or when day not found
-  if (state.days.length === 0 || filteredDays.length === 0) {
-    return interviewerArray;
+  if (state.days.length === 0 || !findDay) {
+    return [];
   }
 
-  interviewerIDs.forEach((id) => {
-    for (let interviewer in state.interviewers) {
-      if (id === state.interviewers[interviewer].id) {
-        interviewerArray.push(state.interviewers[id]);
-      }
-    }
-  })
-
-  return interviewerArray;
+  // return array of interviewer objects that match interviewer IDs in selected day
+  return findDay.interviewers.map(id => state.interviewers[id]);
 }
