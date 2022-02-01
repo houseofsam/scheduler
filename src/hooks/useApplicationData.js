@@ -26,18 +26,19 @@ export default function useApplicationData() {
     });
   }, []);
 
-  function updateSpots(apptID, cancel) {
+  // 2nd parameter indicates whether the appointment change was a cancellation or not
+  function updateSpots(apptID, cancelAppt = false) {
     // get day object by appointment ID
     const selectedDay = state.days.filter(day => day.appointments.includes(apptID))[0];
     let count = selectedDay.spots;
     
-    // if appt slot wasn't empty && if cancel = false, action performed was an edit - no count update required
-    if (state.appointments[apptID].interview !== null && !cancel) {
+    // if appt slot wasn't empty && if cancelAppt = false, action performed was an edit - no count update required
+    if (state.appointments[apptID].interview !== null && !cancelAppt) {
       return state.days;
     }
 
     // adjust count depending on whether appt was cancelled or added
-    cancel ? count++ : count--;
+    cancelAppt ? count++ : count--;
 
     // copy days array, change spots count, return new days array
     const newDays = [ ...state.days ];
@@ -56,7 +57,7 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    const days = updateSpots(id, false); // 2nd param = cancel
+    const days = updateSpots(id); 
 
     return axios
       .put(`/api/appointments/${id}`, appointment)
@@ -68,7 +69,7 @@ export default function useApplicationData() {
   function cancelInterview(id) {
     let newApptObj = { ...state.appointments[id], interview: null };
     const appointments = { ...state.appointments, [id]: newApptObj };
-    const days = updateSpots(id, true); // 2nd param = cancel
+    const days = updateSpots(id, true); // 2nd param = cancelAppt
 
     return axios
       .delete(`/api/appointments/${id}`)

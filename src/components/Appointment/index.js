@@ -26,11 +26,6 @@ const Appointment = (props) => {
   );
 
    function save(name, interviewer) {
-    //  prevent user from submitting if no interviewer is selected
-    if (!interviewer) {
-      return;
-    }
-
     const interview = {
       student: name,
       interviewer
@@ -38,6 +33,7 @@ const Appointment = (props) => {
 
     transition(PROCESSING);
 
+    // props.id is the appointment ID
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch(() => transition(ERROR_SAVE, true));
@@ -45,7 +41,7 @@ const Appointment = (props) => {
 
   // cancel appointment
   function cancel() {
-    transition(PROCESSING);
+    transition(PROCESSING, true);
 
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
@@ -67,7 +63,7 @@ const Appointment = (props) => {
       {mode === CREATE && (
         <Form
           interviewers={props.interviewers}
-          onCancel={() => back()}
+          onCancel={back}
           onSave={save}
         />
       )}
@@ -76,18 +72,22 @@ const Appointment = (props) => {
           student={props.interview.student}
           interviewer={props.interview.interviewer.id}
           interviewers={props.interviewers}
-          onCancel={() => back()}
+          onCancel={back}
           onSave={save}
         />
       )}
       {mode === PROCESSING && (
         <Status 
-          message={history.slice(-2)[0] === "CONFIRM" ? "Deleting..." : "Saving..."}
+          message={
+            history.slice(-1)[0] === "CREATE" || history.slice(-1)[0] === "EDIT"
+              ? "Saving..." 
+              : "Deleting..."
+          }
         />
       )}
       {mode === CONFIRM && (
         <Confirm 
-          onCancel={() => back()}
+          onCancel={back}
           onConfirm={cancel}
           message={"Are you sure you would like to delete?"}
         />
@@ -95,13 +95,13 @@ const Appointment = (props) => {
       {mode === ERROR_DELETE && (
         <Error 
           message={"Could not cancel appointment"}
-          onClose={() => back()}
+          onClose={back}
         />
       )}
       {mode === ERROR_SAVE && (
         <Error 
           message={"Could not save appointment"}
-          onClose={() => back()}
+          onClose={back}
         />
       )}
 

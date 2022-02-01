@@ -13,7 +13,6 @@ Unit, integration and end-to-end tests have been implemented in this project usi
 
 - axios
 - classnames 
-- cypress
 - normalize.css 
 - react
 - react-dom
@@ -23,7 +22,7 @@ Unit, integration and end-to-end tests have been implemented in this project usi
 
 Install dependencies with `npm install`.
 
-Clone Scheduler API from [here](https://github.com/houseofsam/scheduler-api) and follow the instructions provided in the README.
+[Clone Scheduler API server from here](https://github.com/houseofsam/scheduler-api) and follow the instructions provided in the README.
 
 ## Running Webpack Development Server
 
