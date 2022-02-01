@@ -78,7 +78,11 @@ const Appointment = (props) => {
       )}
       {mode === PROCESSING && (
         <Status 
-          message={history.slice(-2)[0] === "CONFIRM" ? "Deleting..." : "Saving..."}
+          message={
+            history.slice(-1)[0] === "CREATE" || history.slice(-1)[0] === "EDIT"
+              ? "Saving..." 
+              : "Deleting..."
+          }
         />
       )}
       {mode === CONFIRM && (
